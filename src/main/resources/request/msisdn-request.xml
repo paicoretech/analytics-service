@@ -1,0 +1,3 @@
+<msisdn-request version="1.0">
+    <imsi>${imsi}</imsi>
+</msisdn-request>

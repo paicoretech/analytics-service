@@ -1,0 +1,56 @@
+#!/bin/bash
+_HOME=$(cd $(dirname "${BASH_SOURCE[0]}") && pwd)
+
+output=$1
+path=$2
+items=0
+
+mergeByEncaptulation(){
+    filter=$1
+    files=""
+    for x in $(ls $path/selection_*); do
+        etype=$(capinfos $x | grep "$filter")
+        if [ -n "$etype" ]; then
+            files="$files$x "
+        fi
+    done
+    echo $files
+}
+
+listOfFiles=$(mergeByEncaptulation "Ethernet")
+if [ -n "$listOfFiles" ]; then
+    mergecap -w $path/ethernet.pcap $listOfFiles
+    items=$((items+1))
+fi
+
+listOfFiles=$(mergeByEncaptulation "Linux cooked-mode capture")
+if [ -n "$listOfFiles" ]; then
+    mergecap -w $path/linux.pcap $listOfFiles
+    python $_HOME/cooked_2_ethernet.py --pcap $path/linux.pcap --output $path/cooked_2_ethernet.pcap
+    items=$((items+2))
+fi
+
+listOfFiles=$(mergeByEncaptulation "SS7 MTP3")
+if [ -n "$listOfFiles" ]; then
+    mergecap -w $path/mtp3.pcap $listOfFiles
+    python $_HOME/mtp3_2_ethernet.py --pcap $path/mtp3.pcap --output $path/mtp3_2_ethernet.pcap
+    items=$((items+4))
+fi
+
+if [ "$items" -eq 1 ]; then
+    mv $path/ethernet.pcap $output
+elif [ "$items" -eq 2 ]; then
+    mv $path/cooked_2_ethernet.pcap $output
+elif [ "$items" -eq 3 ]; then
+    mergecap -w $output $path/ethernet.pcap $path/cooked_2_ethernet.pcap
+elif [ "$items" -eq 4 ]; then
+    mv $path/mtp3_2_ethernet.pcap $output
+elif [ "$items" -eq 5 ]; then
+    mergecap -w $output $path/ethernet.pcap $path/mtp3_2_ethernet.pcap
+elif [ "$items" -eq 6 ]; then
+    mergecap -w $output $path/cooked_2_ethernet.pcap $path/mtp3_2_ethernet.pcap
+elif [ "$items" -eq 7 ]; then
+    mergecap -w $output $path/ethernet.pcap $path/cooked_2_ethernet.pcap $path/mtp3_2_ethernet.pcap
+else
+    echo "Nothing to do"
+fi
