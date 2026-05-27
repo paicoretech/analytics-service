@@ -1,6 +1,6 @@
 # Analytics Service – Open Source Version
 
-The Analytics Service by PAiCore Technologies is a Java Spring Boot REST API designed to query, process, and serve telecom network analytics data. It powers the ReCap dashboard with protocol-level insights, flow diagrams, DWR monitoring, and PCAP download capabilities.
+The Analytics Service by PAiCore Technology is a Java Spring Boot REST API designed to query, process, and serve telecom network analytics data. It powers the ReCap dashboard with protocol-level insights, flow diagrams, DWR monitoring, and PCAP download capabilities.
 
 This open source version allows you to deploy and run the analytics layer on top of your PostgreSQL database, with flexible configuration for telecom and enterprise-grade use cases.
 
@@ -121,7 +121,7 @@ This project is released under the GNU GPL v3 license.
 
 ## Community and Support
 
-This open source version is maintained by the PAiCore Technologies team and the community.
+This open source version is maintained by the PAiCore Technology team and the community.
 For commercial support, enterprise deployments, or custom solutions, please contact us at:
 
 🌐 https://paicore.tech
